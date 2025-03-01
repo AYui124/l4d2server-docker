@@ -1,0 +1,30 @@
+services:
+  left4dead2:
+    image: l4d2:latest
+    container_name: l4d2
+    ports:
+      - 27015:27015/tcp
+      - 27015:27015/udp
+    networks:
+      - l4d2-network
+    stdin_open: true
+    tty: true
+    entrypoint:
+      - /bin/bash
+    command:
+      - -c
+      - |
+        set -e
+        printenv
+        ls -al
+        exec /home/steam/l4d2server/srcds_run -game left4dead2 -port 27015 +map "c2m1_highway coop" +servercfgfile l4d2server.cfg -maxplayers 16
+    volumes:
+      - /opt/l4d2/addons:/home/steam/l4d2server/left4dead2/addons
+      - /opt/l4d2/cfg/sourcemod:/home/steam/l4d2server/left4dead2/cfg/sourcemod
+      - /opt/l4d2/cfg/l4d2server.cfg:/home/steam/l4d2server/left4dead2/cfg/l4d2server.cfg
+      - /opt/l4d2/logs:/home/steam/l4d2server/left4dead2/logs
+      - /opt/l4d2/motd.txt:/home/steam/l4d2server/left4dead2/motd.txt
+      - /opt/l4d2/host.txt:/home/steam/l4d2server/left4dead2/host.txt
+networks:
+    l4d2-network:
+        driver: bridge
