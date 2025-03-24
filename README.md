@@ -42,7 +42,22 @@ docker attach --detach-keys="ctrl-q" l4d2
 
 ## 更新服务
 方法1: 使用docker exec 启动镜像后通过steamcmd更新，保存容器到新的镜像  
-  //Todo   
+- 删除并进入临时容器
+```
+docker stop l4d2
+docker run -it --name temp_l4d2 l4d2 /bin/bash
+```
+- 执行更新
+```
+cd /home/steam/steamcmd
+ ./steamcmd.sh +force_install_dir /home/steam/l4d2server +login anonymous +@sSteamCmdForcePlatformType linux +app_update 222860 validate +quit
+exit
+```
+- 从容器更新镜像并清理
+```
+docker commit temp_l4d2 l4d2
+docker rm temp_l4d2
+```
 方法2: 从头开始创建
 - 删除容器和镜像
 ```
